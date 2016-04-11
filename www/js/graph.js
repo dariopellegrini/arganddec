@@ -130,7 +130,7 @@ function Fsupp(v0,S){
 	}
 	else if (S[S.length-1]==0){
 		S.pop();
-		return Fatt(v0,S);
+		return Fsupp(v0,S);
 	}
 	else if (S[S.length-1]==1){
 		return 1;
