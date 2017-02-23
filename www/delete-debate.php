@@ -24,7 +24,8 @@ $id = $_POST['id'];
 $sql1 = mysql_query("DELETE FROM debates WHERE id=$id AND ownerid='$userid'") or die(mysql_error());
 $sql2 = mysql_query("DELETE FROM nodes WHERE debateid=$id") or die(mysql_error());
 $sql3 = mysql_query("DELETE FROM edges WHERE debateid=$id") or die(mysql_error());
-$sql4 = mysql_query("DELETE FROM mapping WHERE debateid='$debateid'") or die(mysql_error());
+$sql4 = mysql_query("DELETE FROM rights WHERE debateid='$id'") or die (mysql_error());
+$sql5 = mysql_query("DELETE FROM mapping WHERE debateid='$debateid'") or die(mysql_error());
 
 echo mysql_insert_id();
 

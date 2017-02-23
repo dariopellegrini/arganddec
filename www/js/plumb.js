@@ -64,51 +64,132 @@ loadNodes();
 
 });
 
-function addNode(){
+function addNode(attachment_path){
 
 // Modal initialized in modal.js file.
   var id = $("#node-modal").find(".id-modal > b").html();
   var name = encodeURIComponent($("#node-modal").find(".name-modal > input").val());
   var baseValue = encodeURIComponent($("#node-modal").find(".basevalue-modal > input").val());
-  var computedValue = encodeURIComponent($("#node-modal").find(".computedvalue-modal > input").val());
+  var computedValueQuad = encodeURIComponent($("#node-modal").find(".computedvalue-quad-modal > input").val());
+  var computedValueDFQuad = encodeURIComponent($("#node-modal").find(".computedvalue-dfquad-modal > input").val());
   var type = $("#node-modal").find(".type-modal > b").html();
   var typeValue = encodeURIComponent($("#node-modal").find(".typevalue-modal > input").val());
   var state = $("#node-modal").find(".state-modal > select").val();
-  var attachment = encodeURIComponent($("#node-modal").find(".attachment-modal > input").val());
-
+  var attachment = encodeURIComponent($("#node-modal").find(".attachment-modal > input#url_attachment").val());
+  if(attachment_path !== '') {
+      attachment += ", "+encodeURIComponent(attachment_path);
+  }
+ 
   if (name==""){
     name = 'Node '+type;
   }
 
   if (baseValue==""){
-    baseValue = '0.5';
-  }
+    
+    var result = getDefaultBaseValue(thisDebateId);
+    var defaultBaseValue = result.success(function(data){
+        
+        var result = JSON.parse(data);
+        baseValue = result.basevalue;
+        
+        if (computedValueQuad==""){
+            computedValueQuad = '0';
+          }
 
-  if (computedValue==""){
-    computedValue = '0';
+          if (computedValueDFQuad==""){
+            computedValueDFQuad = '0';
+          }
+
+          if (typeValue==""){
+            typeValue="";
+          }
+
+          // Experimantal x and y values.
+          x = 20;
+          y = 471;
+
+          checkOverlap();
+
+          //console.log(x+" "+y);
+
+          $.ajax({
+                    type: "POST",
+                    url: "add-node.php",
+                    data: "did="+thisDebateId+"&n="+name+"&bv="+baseValue+"&cvq="+computedValueQuad+"&cvdfq="+computedValueDFQuad+"&t="+type+"&tv="+typeValue+"&s="+state+"&a="+attachment+"&x="+x+"&y="+y,
+                    cache: false,
+                    success: function(dat) {
+                      console.log(dat);
+                      var obj = JSON.parse(dat);
+                      var id = obj["nodeid"];
+                      var createdBy = obj["createdby"];
+                      var modifiedBy = '';
+
+                      var node = new Node(id,decodeURIComponent(name),decodeURIComponent(baseValue),decodeURIComponent(computedValueQuad),
+                                            decodeURIComponent(computedValueDFQuad),decodeURIComponent(type),decodeURIComponent(typeValue),
+                                            decodeURIComponent(state),decodeURIComponent(attachment),{},{},x,y,createdBy,modifiedBy);
+                      node.initializeNode();
+
+                      console.log(node);
+                      nodeList[id] = node;
+
+                      // Automatic show of the help popover for edges creation.
+
+                      var element_count = 0;
+
+                      for(var e in nodeList)
+                        element_count++;
+
+                      if (element_count == 2){
+                        $('#advice').popover({content: $("#advice").parent().html()}).popover('show');
+                      }
+
+                    }
+                });
+
+            });
+    
+    //console.log("def base value "+baseValue);
+    
+  }
+/*
+  if (computedValueQuad==""){
+    computedValueQuad = '0';
+  }
+  
+  if (computedValueDFQuad==""){
+    computedValueDFQuad = '0';
   }
 
   if (typeValue==""){
-    typeValue=thisUsername;
+    typeValue="";
   }
 
   // Experimantal x and y values.
   x = 20;
-  y = 451;
+  y = 471;
 
   checkOverlap();
 
-  console.log(x+" "+y);
+  //console.log(x+" "+y);
 
   $.ajax({
             type: "POST",
             url: "add-node.php",
-            data: "did="+thisDebateId+"&n="+name+"&bv="+baseValue+"&cv="+computedValue+"&t="+type+"&tv="+typeValue+"&s="+state+"&a="+attachment+"&x="+x+"&y="+y,
+            data: "did="+thisDebateId+"&n="+name+"&bv="+baseValue+"&cvq="+computedValueQuad+"&cvdfq="+computedValueDFQuad+"&t="+type+"&tv="+typeValue+"&s="+state+"&a="+attachment+"&x="+x+"&y="+y,
             cache: false,
             success: function(dat) {
-              var id = dat;
-              var node = new Node(id,decodeURIComponent(name),decodeURIComponent(baseValue),decodeURIComponent(computedValue),decodeURIComponent(type),decodeURIComponent(typeValue),decodeURIComponent(state),decodeURIComponent(attachment),{},{},x,y);
+              console.log(dat);
+              var obj = JSON.parse(dat);
+              var id = obj["nodeid"];
+              var createdBy = obj["createdby"];
+              var modifiedBy = '';
+              
+              var node = new Node(id,decodeURIComponent(name),decodeURIComponent(baseValue),decodeURIComponent(computedValueQuad),
+                                    decodeURIComponent(computedValueDFQuad),decodeURIComponent(type),decodeURIComponent(typeValue),
+                                    decodeURIComponent(state),decodeURIComponent(attachment),{},{},x,y,createdBy,modifiedBy);
               node.initializeNode();
+              
+              console.log(node);
               nodeList[id] = node;
 
               // Automatic show of the help popover for edges creation.
@@ -119,17 +200,31 @@ function addNode(){
                 element_count++;
 
               if (element_count == 2){
-                $('[data-toggle="popover"]').popover('show');
+                $('#advice').popover({content: $("#advice").parent().html()}).popover('show');
               }
 
             }
-            });
+        });*/
 
 
 
 }
 
-
+function getDefaultBaseValue(debateId){
+    
+    return $.ajax({
+            type: "POST",
+            url: "get-default-basevalue.php",
+            data: "did="+debateId,
+            cache: false,
+            success: function(dat) {
+                
+            }
+        });
+ 
+ }
+ 
+ 
 function loadNodes(){
 
   nodeList=[]
@@ -150,17 +245,20 @@ function loadNodes(){
 //                var debateId = obj[i].debateId;
                 var name = obj[i].name;
                 var baseValue = obj[i].basevalue;
-                var computedValue = obj[i].computedvalue;
+                var computedValueQuad = obj[i].computedvaluequad;
+                var computedValueDFQuad = obj[i].computedvaluedfquad;
                 var type = obj[i].type;
                 var typeValue = obj[i].typevalue;
                 var state = obj[i].state;
                 var attachment = obj[i].attachment;
                 var x = obj[i].x;
                 var y = obj[i].y;
+                var createdby = obj[i].createdby;
+                var modifiedby = obj[i].modifiedby;
 
                 setNodeColor(type);
 
-                var node = new Node(id,decodeURIComponent(name),decodeURIComponent(baseValue),decodeURIComponent(computedValue),decodeURIComponent(type),decodeURIComponent(typeValue),decodeURIComponent(state),decodeURIComponent(attachment),{},{},x,y);
+                var node = new Node(id,decodeURIComponent(name),decodeURIComponent(baseValue),decodeURIComponent(computedValueQuad),decodeURIComponent(computedValueDFQuad),decodeURIComponent(type),decodeURIComponent(typeValue),decodeURIComponent(state),decodeURIComponent(attachment),{},{},x,y,createdby,modifiedby);
 
                 
                 node.initializeNode();
@@ -222,16 +320,22 @@ function deleteNode(element){
 }
 
 
-function editNode(node){
-
+function editNode(node, new_attachment_path){
+    
+    console.log("new att: "+new_attachment_path);
     var id = node.id;
     var newName = $(".name-modal > input").val();
     var newBaseValue = encodeURIComponent($(".basevalue-modal > input").val());
-    var newComputedValue = $(".computedvalue-modal > input").val();
+    var newComputedValueQuad = $(".computedvalue-quad-modal > input").val();
+    var newComputedValueDFQuad = $(".computedvalue-dfquad-modal > input").val();
     var newTypeValue = encodeURIComponent($(".typevalue-modal > input").val());
+    
     var newState = nodeList[id].state;
-    var newAttachment = encodeURIComponent($(".attachment-modal > input").val());
-
+    var newAttachment = encodeURIComponent($("#node-modal").find(".attachment-modal > input#url_attachment").val());
+    if(newAttachment.search(new_attachment_path) !== '-1') {
+        newAttachment += ", " + encodeURIComponent(new_attachment_path);
+    }
+   
     var text = newName;
     if (text.length>labelLength) {
         text = text.substring(0,labelLength-1)+"...";
@@ -240,26 +344,46 @@ function editNode(node){
     $.ajax({
             type: "POST",
             url: "edit-node.php",
-            data: "id="+node.id+"&n="+newName+"&bv="+newBaseValue+"&cv="+newComputedValue+"&tv="+newTypeValue+"&s="+newState+"&a="+newAttachment,
+            data: "id="+node.id+"&n="+newName+"&bv="+newBaseValue+"&cvq="+newComputedValueQuad+"&cvdfq="+newComputedValueDFQuad+"&tv="+newTypeValue+"&s="+newState+"&a="+newAttachment,
             cache: false,
             success: function(dat) {
+                console.log(dat);
+              var obj = JSON.parse(dat);
+              
+              //var nodeid = obj["nodeid"];
+              var modifiedBy = obj["modifiedby"];
               $("#"+id+" > #name").html(text);
               $("#"+id+" > #name").attr('title',newName);
-              node.editInfo(decodeURIComponent(newName), decodeURIComponent(newBaseValue), decodeURIComponent(newComputedValue), decodeURIComponent(newTypeValue), decodeURIComponent(newState), decodeURIComponent(newAttachment));
-
+              node.editInfo(decodeURIComponent(newName), decodeURIComponent(newBaseValue), decodeURIComponent(newComputedValueQuad), decodeURIComponent(newComputedValueDFQuad), decodeURIComponent(newTypeValue), decodeURIComponent(newState), decodeURIComponent(newAttachment),decodeURIComponent(modifiedBy));
+              
               // Modifying node image.
               $('#' + id).find('img').attr('src','gallery/'+nodeList[id].type+'-'+newState.toLowerCase()+'.png');
             }
             });
 }
 
-function editComputedValue(node, newComputedValue){
 
-  nodeList[node.id].computedValue=newComputedValue;
+function editComputedValueQuad(node, newComputedValue){
+
+  nodeList[node.id].computedValueQuad=newComputedValue;
       $.ajax({
             type: "POST",
             url: "edit-node.php",
-            data: "id="+node.id+"&n="+node.name+"&bv="+node.baseValue+"&cv="+newComputedValue+"&tv="+node.typeValue+"&s="+node.state+"&a="+node.attachment,
+            data: "id="+node.id+"&n="+node.name+"&bv="+node.baseValue+"&cvq="+newComputedValue+"&tv="+node.typeValue+"&s="+node.state+"&a="+node.attachment,
+            cache: false,
+            success: function(dat) {
+            }
+            });
+
+}
+
+function editComputedValueDFQuad(node, newComputedValue){
+
+  nodeList[node.id].computedValueDFQuad=newComputedValue;
+      $.ajax({
+            type: "POST",
+            url: "edit-node.php",
+            data: "id="+node.id+"&n="+node.name+"&bv="+node.baseValue+"&cvdfq="+newComputedValue+"&tv="+node.typeValue+"&s="+node.state+"&a="+node.attachment,
             cache: false,
             success: function(dat) {
             }
@@ -406,7 +530,7 @@ function deleteEdge(id){
 The funciton check if the thisRight variable is equal to 'r'. This means that the user can only read the graph. So proceeds with the disabling of tools for graph editing.
 */
 function setRights(){
-  if(thisRight=='r'){
+  if(thisRight==='r'){
     $('.node-buttons > button').prop('disabled', true);
     $('.name-label').attr('onDblClick','');
     $('.edit-button').hide();
@@ -433,7 +557,7 @@ function setState(element){
       $.ajax({
             type: "POST",
             url: "edit-state.php",
-            data: "id="+nodeId+"&n="+"&s="+nState,
+            data: "id="+nodeId+"&s="+nState,
             cache: false,
             success: function(dat) {
               // Modifying node image.
@@ -441,6 +565,42 @@ function setState(element){
             }
             });
 
+
+}
+
+function setType(element) {
+    var nodeId = $(element).parents('.item').attr('id');
+    var nType = $(element).html();
+    
+    nType = nType.toLowerCase();
+    nodeList[nodeId].type = nType;
+
+    $.ajax({
+            type: "POST",
+            url: "edit-node-type.php",
+            data: "id="+nodeId+"&type="+nType,
+            cache: false,
+            success: function(dat) {
+                var success = JSON.parse(dat);
+                
+                if(success.success!==0) {
+                    // Modifying node image.
+                    $('#'+nodeId).find('img').attr('src','gallery/'+nodeList[nodeId].type+'-basic.png');
+
+                    var type = nodeList[nodeId].type;
+
+
+                    // Giving ep the right color.
+                    $('#' + nodeId).css({
+                              'box-shadow' : '0px 0px 10px',
+                              'color' : getRightColor(type)
+                    });
+                }
+                else{
+                    bootbox.alert("Before changing the type of the node, put at 'Basic' its state!");
+                }
+            }
+        });
 }
 
 // Used in node.js to check if a string is an url.
@@ -453,6 +613,12 @@ function validURL(str) {
   }
 }
 
+function makeValidURL(str) {
+    str = str.trim();
+    str = str.replace(/\s+/g, '%20');
+    return str;
+}
+
 function resizeContainer(id){
     var top = $('#'+id).offset().top;
     var left = $('#'+id).offset().left;
@@ -463,11 +629,7 @@ function resizeContainer(id){
     if(top>h){
       $('.diagram').height(top);
     }
-
     
-
-
-
     if(left+$('#'+id).width()>w){
       $('.diagram, nav').width(left+$('#'+id).width()*2);
     }

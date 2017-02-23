@@ -15,10 +15,7 @@ if (!isset($_SESSION['id'])) {
 
 $userid = $_SESSION['id'];
 
-
-
-
-$name = $_POST['n'];
+$name = mysql_real_escape_string($_POST['n']); 
 $defaultbasevalue = $_POST['dbv'];
 $participants =  $_POST['p'];
 $typevalue = $_POST['tv'];

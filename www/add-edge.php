@@ -17,6 +17,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['debate'])) {
 
 
 $userid = $_SESSION['id'];
+$username = $_SESSION['username'];
 $debateid = $_POST['did'];
 
 
@@ -49,5 +50,8 @@ $data['targetid']=$targetid;
 
 
 $pusher->trigger('test_channel', 'my_event', $data);
+
+// update lastmodified(by) in debates
+$sql1 = mysql_query("UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$debateid'");
 
 mysql_close($connection);

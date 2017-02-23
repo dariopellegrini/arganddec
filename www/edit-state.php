@@ -15,17 +15,28 @@ if (!isset($_SESSION['id'])) {
 }
 
 $userid = $_SESSION['id'];
+$username = $_SESSION['username'];
 
 $id = $_POST['id'];
 $state = $_POST['s'];
 
-$sqldebateid=mysql_query("SELECT debateid FROM nodes WHERE id=$id") or die(mysql_error());
+$sqldebateid=mysql_query("SELECT debateid, modifiedby FROM nodes WHERE id=$id") or die(mysql_error());
 
 while($r=mysql_fetch_array($sqldebateid)){
 	$debateid=$r['debateid'];
+        $modifiedby=$r['modifiedby'];
 }
 
-$sql = mysql_query("UPDATE nodes SET state='$state' WHERE id=$id") or die(mysql_error());
+$pos = strpos($modifiedby, $username.' ');
+$modifiedby_str = '';
+// don't repeat the name of the user if it has already modified the node at least once
+if($pos === false) {
+    
+    $modifiedby_str = $username." ".$modifiedby;
+    
+} else  $modifiedby_str = $modifiedby;
+
+$sql = mysql_query("UPDATE nodes SET state='$state', modifiedby='$modifiedby_str' WHERE id=$id") or die(mysql_error());
 
 echo mysql_insert_id();
 
@@ -40,7 +51,11 @@ $data['userid']=$userid;
 $data['debateid']=$debateid;
 $data['nodeid']=$id;
 $data['state']=$state;
+$data['modifiedby']=$modifiedby_str;
 
 $pusher->trigger('test_channel', 'my_event', $data);
+
+// update the date of the last modified (by) of the current debate
+$sql1 = mysql_query("UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$debateid'");
 
 mysql_close($connection);

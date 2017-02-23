@@ -33,14 +33,14 @@
 }
 
   </style>
-  
+
   <script>
-    
+
     function inviaCredenziali(){
-      
+
       var username = $("input[name='username']").val();
       var password = $("input[name='password']").val();
-      
+
       $.ajax({
         type: "POST",
         url: "check-credentials.php",
@@ -54,7 +54,7 @@
               }
               });
     }
-    
+
   </script>
 
   <div id="pong-modal" class="modal fade">
@@ -65,9 +65,9 @@
         <h4 class="modal-title">PONG!</h4>
       </div>
       <div class="modal-body">
-              <canvas id="myCanvas" width="500" height="300">  
-                <!-- Insert fallback content here -->  
-            </canvas> 
+              <canvas id="myCanvas" width="500" height="300">
+                <!-- Insert fallback content here -->
+            </canvas>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -99,7 +99,7 @@ Problems deciding? With Arg&Dec you can engage in debates with yourself or other
     else{
       echo "
       <div id=\"login_container\" style=\"display:inline-block; vertical-align:top;\">
-      
+
       <label class=\"username\">Username: </label><br>
       <input type=\"text\" class=\"username\" name=\"username\"/><br>
       <label class=\"password\">Password: </label><br>
@@ -110,25 +110,26 @@ Problems deciding? With Arg&Dec you can engage in debates with yourself or other
       </div>
       ";
     }
-    
-  
-  ?> 
+
+
+  ?>
 <div style="display:inline-block; vertical-align:top;">
     <img src="gallery/A&D-icon2.png" style="width:150px;"/>
   </div>
 </div>
   <br><br><br>
-  
-  <div style="position:absolute; bottom:5px; right:5px; z-index=6">
+
+  <div style="position:absolute; bottom:5px; right:5px; z-index:6">
 <a href="#" onMouseOver="$('#footer').fadeIn(100);">About</a>
 </div>
 
-  <div id="footer" style="display: none; z-index=10;">
+  <div id="footer" style="display: none; z-index:10;">
     <hr class="divider">
     <footer style="padding-left:5px;">
   <p>Posted by: Dario Pellegrini</p>
   <p>Contact information: <a href="mailto:pellegrini.dario.1303@gmail.com">
   pellegrini.dario.1303@gmail.com</a>.</p>
+  <p>Code available on Github <a href="https://github.com/dariopellegrini/arganddec" target="_blank">here</a>.</p>
 </footer>
 
 <script>
@@ -140,7 +141,7 @@ $(document).mousemove(function(event){
 });
 
 </script>
-  
+
   </div>
   </body>
 </html>

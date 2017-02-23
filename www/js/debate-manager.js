@@ -12,13 +12,13 @@ function addDebate(){
   var typeValue = $("#debate-modal").find(".typevalue-modal > input").val();
 
 
-
-
-
-
 if (name=="") {
     name = "Unknown Debate";
   };
+  
+if (defaultBaseValue=="") {
+    defaultBaseValue = 0.5;
+}
 
 $.ajax({
             type: "POST",
@@ -81,8 +81,9 @@ $.ajax({
               debateList[id] = debate;
 
                 // Node creation.
-                var baseValue = 0;
-                var computedValue = 0;
+                var baseValue = defaultBaseValue;
+                var computedValueQuad = 0;
+                var computedValueDFQuad = 0;
                 var type = 'por';
                 var typeValue = '';
                 var state='';
@@ -90,11 +91,11 @@ $.ajax({
                   $.ajax({
                     type: "POST",
                     url: "add-node.php",
-                    data: "n="+name+"&bv="+baseValue+"&cv="+computedValue+"&t="+type+"&tv="+typeValue+"&s="+state+"&a="+attachment+"&ld"+id,
+                    data: "n="+name+"&bv="+baseValue+"&cvq="+computedValueQuad+"&cvdfq="+computedValueDFQuad+"&t="+type+"&tv="+typeValue+"&s="+state+"&a="+attachment+"&ld"+id,
                     cache: false,
                     success: function(dat) {
                       var nid = dat;
-                      var node = new Node(nid,name,baseValue,computedValue,type,typeValue,state,attachment,{},{},id);
+                      var node = new Node(nid,name,baseValue,computedValueQuad,computedValueDFQuad,type,typeValue,state,attachment,{},{},id);
                       node.initializeDebateNode();
                       nodeList[id] = node;
 
@@ -141,6 +142,7 @@ function loadDebates(){
                   msg += '<li><a href="#" onClick="debateList['+id+'].displayInfo();">Info</a></li>';
                   msg += '<li><a id="modal-edit-debate" href="#" onClick="modalEditDebate(debateList['+id+'])">Edit</a></li>';
                   msg += '<li><a id="modal-access-button" href="#" onClick="modalAccess('+id+',debateList['+id+'].name)">Access control</a></li>';
+                  msg += '<li><a id="unsubscribe-debate" href="#" onClick="unsubscribeDebate(debateList['+id+'])">Unsubscribe</a></li>';
                   msg += '<li class="divider"></li>';
                   msg += '<li><a href="#" id="delete-debate-button" onClick="deleteDebate(debateList['+id+'])">Delete</a></li>';
                   msg += '</ul>';
@@ -157,6 +159,9 @@ function loadDebates(){
 
               if(right!='o' && right!='w'){
                 $('#debate'+id).find('#modal-edit-debate').fadeOut(100);
+              }
+              if(right=='o') {
+                  $('#debate'+id).find('#unsubscribe-debate').fadeOut(100);
               }
 
               debateList[id] = debate;
@@ -213,4 +218,29 @@ function editDebate(debate){
 
             }
             });
+}
+
+function unsubscribeDebate(debate) {
+  
+    bootbox.confirm("<h3>Do you want to unsubscribe from " + debate.name + "?</h3>", function(result){
+        if(result){
+          $.ajax({
+            type: "POST",
+            url: "unsubscribe-debate.php",
+            data: "did="+debate.id,
+            cache: false,
+            success: function(dat) {
+                
+                    $("#debate"+debate.id).fadeOut(300, function(){
+
+                        delete debateList['debate.id'];
+
+              });
+
+            }
+            });
+
+        }
+      });
+   
 }

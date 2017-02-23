@@ -208,7 +208,7 @@ $(document).ready(function(){
   </div>
 
   <script>
-  $('#owned-tab a').click(function (e) {
+/*  $('#owned-tab a').click(function (e) {
   e.preventDefault()
   $(this).tab('show')
 });
@@ -221,7 +221,7 @@ $(document).ready(function(){
   $('#read-tab a').click(function (e) {
   e.preventDefault()
   $(this).tab('show')
-});
+});*/
   </script>
 
   <!--  <div id="myDiagramDiv"

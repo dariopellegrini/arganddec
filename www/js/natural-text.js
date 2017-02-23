@@ -67,7 +67,7 @@ function descendantsProcess(node){
 			}
 			else{
 				msg+=proNum+' pro nodes and no con node. ';
-				msg+='These pro nodes give to "'+node.name+'" a value of '+node.computedValue+'. '
+				msg+='These pro nodes give to "'+node.name+'" a value of '+node.computedValueQuad+'. '
 				msg+=proNodesProcess(proList);
 		}
 	}
@@ -76,18 +76,18 @@ function descendantsProcess(node){
 
 			if(proNum>conNum*2){
 				msg+='In this case pro nodes are a lot more than con nodes, that with an average value of '+getAverageValue(conList)+' are not enough for the pro nodes\' values. ';
-				msg+='These pro nodes give to "'+node.name+'" a value of '+node.computedValue+'. ';
+				msg+='These pro nodes give to "'+node.name+'" a value of '+node.computedValueQuad+'. ';
 				msg+=proNodesProcess(proList);
 			}
 			else if(proNum>conNum){
 				msg+='In this case number of pro nodes and number of con nodes are similar. ';
 				msg+='Con nodes are less and, with an average value of '+getAverageValue(conList)+', are not enough for the values of pro nodes. ';
-				msg+='Pro nodes instead are very strong and give to "'+node.name+'" a value of '+node.computedValue+'. '
+				msg+='Pro nodes instead are very strong and give to "'+node.name+'" a value of '+node.computedValueQuad+'. '
 				msg+=proNodesProcess(proList);
 			}
 			else{
 				msg+='Even if number of pro nodes doesn\'t pass the one of con nodes, con nodes have an average value of '+getAverageValue(conList)+' that is not enough for the pro nodes\' values. ';
-				msg+='Thank to pro nodes, "'+node.name+'" has a value of '+node.computedValue+'. ';
+				msg+='Thank to pro nodes, "'+node.name+'" has a value of '+node.computedValueQuad+'. ';
 				msg+=proNodesProcess(proList);
 			}
 		}
@@ -145,10 +145,10 @@ function getBestNode(nodeList){
 	var maxValue=0;
 
 	for(var n in nodeList){
-		if(nodeList[n].computedValue>maxValue){
+		if(nodeList[n].computedValueQuad>maxValue){
 
 			maxNode=nodeList[n];
-			maxValue=nodeList[n].computedValue;
+			maxValue=nodeList[n].computedValueQuad;
 
 		}
 	}
@@ -188,7 +188,7 @@ function getAverageValue(nodeList){
 	var sum=0;
 
 	for(var n in nodeList){
-		sum+=nodeList[n].computedValue;
+		sum+=nodeList[n].computedValueQuad;
 	}
 
 	return Math.round(sum/listLength(nodeList) * 1000) / 1000;
@@ -201,7 +201,7 @@ function getVarianceValue(nodeList){
 	var sum=0;
 
 	for(var n in nodeList){
-		sum+=(nodeList[n].computedValue-average)*(nodeList[n].computedValue-average);
+		sum+=(nodeList[n].computedValueQuad-average)*(nodeList[n].computedValueQuad-average);
 	}
 
 	return Math.round(sum/listLength(nodeList) * 1000) / 1000;

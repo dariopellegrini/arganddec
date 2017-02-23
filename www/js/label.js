@@ -36,7 +36,7 @@ function blurLabel(element){
         $.ajax({
             type: "POST",
             url: "edit-node.php",
-            data: "id="+parentId+"&n="+$('#'+parentId+'> #name_entry').val()+"&bv="+thisNode.baseValue+"&cv="+thisNode.computedValue+"&tv="+thisNode.typeValue+"&s="+thisNode.state+"&a="+thisNode.attachment,
+            data: "id="+parentId+"&n="+$('#'+parentId+'> #name_entry').val()+"&bv="+thisNode.baseValue+"&cvq="+thisNode.computedValueQuad+"&tv="+thisNode.typeValue+"&s="+thisNode.state+"&a="+thisNode.attachment,
             cache: false,
             success: function(dat) {
             }

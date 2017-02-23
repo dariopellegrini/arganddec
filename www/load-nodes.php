@@ -30,6 +30,11 @@ while($r = mysql_fetch_assoc($sqldata)) {
   $rows[] = $r;
 }
 
-echo json_encode($rows);
+$json_encoded_string = json_encode($rows);
+
+// manage percent symbol for json encoding
+$json_encoded_string = escape_percentage_for_json($json_encoded_string);
+
+echo $json_encoded_string;
 
 mysql_close($connection);

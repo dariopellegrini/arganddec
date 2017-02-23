@@ -38,8 +38,8 @@ function managePush(data){
 
 function pushAddedNode(data){
 
-	var pushedNode=new Node(data.nodeid,data.name,data.basevalue,data.computedvalue,data.type,data.typevalue,data.state,data.attachment,{},{},data.x,data.y);
-
+	var pushedNode=new Node(data.nodeid,data.name,data.basevalue,data.computedvaluequad,data.computedvaluedfquad,data.type,data.typevalue,data.state,data.attachment,{},{},data.x,data.y,data.createdby,data.modifiedby);
+        
 	pushedNode.initializeNode();
 
 	nodeList[data.nodeid]=pushedNode;
@@ -60,7 +60,7 @@ function pushNodeDelete(data){
 	}
 
 	delete nodeList[data.nodeid];
-
+        
 	// Delete from every edge.
 	for (var n in edgeList){
 		if(edgeList[n].source.id==data.nodeid || edgeList[n].target.id==data.nodeid){
@@ -110,7 +110,9 @@ function pushNodeEdit(data){
 
 	$("#"+data.nodeid+" > #name").html(text);
 	$("#"+data.nodeid+" > #name").attr('title',data.name);
-	nodeList[data.nodeid].editInfo(decodeURIComponent(data.name), decodeURIComponent(data.basevalue), decodeURIComponent(data.computedvalue), decodeURIComponent(data.typevalue), decodeURIComponent(data.state), decodeURIComponent(data.attachment));
+        
+        //console.log("pushEditNode: "+data.name+" "+data.createdby+" "+data.modifiedby);
+	nodeList[data.nodeid].editInfo(decodeURIComponent(data.name), decodeURIComponent(data.basevalue), decodeURIComponent(data.computedvaluequad), decodeURIComponent(data.computedvaluedfquad), decodeURIComponent(data.typevalue), decodeURIComponent(data.state), decodeURIComponent(data.attachment), decodeURIComponent(data.modifiedby));
 
 
 }
@@ -118,7 +120,8 @@ function pushNodeEdit(data){
 function pushStateEdit(data){
 
 	 nodeList[data.nodeid].state = data.state;
-
+         nodeList[data.nodeid].modifiedby = data.modifiedby;
+         nodeList[data.nodeid].editStateInfo(decodeURIComponent(data.state), decodeURIComponent(data.modifiedby));
 	 $('#'+data.nodeid).find('img').attr('src','gallery/'+nodeList[data.nodeid].type+'-'+data.state.toLowerCase()+'.png');
 }
 
@@ -136,9 +139,9 @@ function pushWormhole(data){
 }
 
 function pushPositionUpdate(data){
-
+       
 	$('#'+data.nodeid).offset({ left: data.x, top: data.y });
-	instance.repaintEverything();
+        instance.repaintEverything();
 	nodeList[data.nodeid].x=x;
 	nodeList[data.nodeid].y=y;
 

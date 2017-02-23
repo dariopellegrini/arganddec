@@ -24,7 +24,7 @@ function graphMapping(){
 	}
 		for(var n in nodeList){
 			if((nodeList[n].type=='pro' || nodeList[n].type=='con') && (checkCorrectLevel(nodeList[n],matrixJSON[0])) ){
-			var value = nodeList[n].computedValue!='0' ? nodeList[n].computedValue : nodeList[n].baseValue;
+			var value = nodeList[n].computedValueQuad!='0' ? nodeList[n].computedValueQuad : nodeList[n].baseValue;
 
 		//	if(typeof addedEffect[nodeList[n].name+value]=='undefined'){
 				var effectRow=[];
@@ -125,7 +125,7 @@ function freezeGraph(thisMatrixId){
 		node['originalid']=n;
 		node['name']=nodeList[n].name;
 		node['basevalue']=nodeList[n].baseValue;
-		node['computedvalue']=nodeList[n].computedValue;
+		node['computedvaluequad']=nodeList[n].computedValueQuad;
 		node['type']=nodeList[n].type;
 		node['typevalue']=nodeList[n].typeValue;
 		node['state']=nodeList[n].state;

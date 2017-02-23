@@ -20,12 +20,16 @@ $right = $_POST['r'];
 
 
 $sql1 = mysql_query("SELECT * FROM rights WHERE userid='$userid' AND debateid='$debateid'") or die(mysql_error());
-
-if (mysql_num_rows($sql1)>0){
-	$sql2 = mysql_query("UPDATE rights SET accessright='$right',modified=CURRENT_TIMESTAMP WHERE userid='$userid' AND debateid='$debateid'") or die(mysql_error());
+if($right!=''){
+    if (mysql_num_rows($sql1)>0){
+            $sql2 = mysql_query("UPDATE rights SET accessright='$right',modified=CURRENT_TIMESTAMP WHERE userid='$userid' AND debateid='$debateid'") or die(mysql_error());
+    }
+    else {
+            $sql2 = mysql_query("INSERT INTO rights (userid,debateid,accessright,modified) VALUES ('$userid','$debateid','$right',CURRENT_TIMESTAMP)") or die(mysql_error());
+    }
 }
 else {
-	$sql2 = mysql_query("INSERT INTO rights (userid,debateid,accessright,modified) VALUES ('$userid','$debateid','$right',CURRENT_TIMESTAMP)") or die(mysql_error());
+    $sql3 = mysql_query("DELETE FROM rights WHERE userid='$userid' AND debateid='$debateid'") or die(mysql_error());
 }
 
 echo 'OK!';

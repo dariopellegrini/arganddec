@@ -14,7 +14,7 @@ if (!isset($_SESSION['id'])) {
 }
 
 $userid = $_SESSION['id'];
-
+$username = $_SESSION['username'];
 
 
 
@@ -29,5 +29,7 @@ $sql = mysql_query("UPDATE debates SET name='$name', defaultbasevalue='$defaultB
 
 echo mysql_insert_id();
 
+// update lastmodified(by) in debates
+$sql1 = mysql_query("UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$id'");
 
 mysql_close($connection);

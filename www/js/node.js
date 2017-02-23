@@ -1,32 +1,38 @@
-function Node(id, name, baseValue, computedValue, type, typeValue, state, attachment, sourceList, targetList, x, y){
+function Node(id, name, baseValue, computedValueQuad, computedValueDFQuad, type, typeValue, state, attachment, sourceList, targetList, x, y, createdBy, modifiedBy){
 
 	// Attributes.
 	this.id = id;
 	this.name = name;
 	this.baseValue = baseValue;
-  this.computedValue = computedValue;
+        this.computedValueQuad = computedValueQuad;
+        this.computedValueDFQuad = computedValueDFQuad;
 	this.type = type;
+        
 
-  if(state==''){
-    state='Basic';
-  }
+        if(state==''){
+          state='Basic';
+        }
 
-	this.typeValue = typeValue;
-  this.state = state;
-	this.attachment = attachment;
-  this.sourceList = sourceList;
-  this.targetList = targetList;
-  this.x = x;
-  this.y = y;
+        this.typeValue = typeValue;
+        this.state = state;
+        this.attachment = attachment;
+        this.sourceList = sourceList;
+        this.targetList = targetList;
+        this.x = x;
+        this.y = y;
+        this.createdBy = createdBy;
+        this.modifiedBy = modifiedBy;
+        
 
-
-  // Mothods.
-	this.displayInfo = displayInfo;
-	this.initializeNode = initializeNode;
-  this.editInfo = editInfo;
-  this.getSupporters = getSupporters;
-  this.getAttackers = getAttackers;
-  this.printTheFunction = printTheFunction;
+        // Mothods.
+        this.displayInfo = displayInfo;
+        this.initializeNode = initializeNode;
+        this.editInfo = editInfo;
+        this.editTypeInfo = editTypeInfo;
+        this.editStateInfo = editStateInfo;
+        this.getSupporters = getSupporters;
+        this.getAttackers = getAttackers;
+        this.printTheFunction = printTheFunction;
 
 }
 
@@ -38,18 +44,35 @@ function displayInfo(){
     msg += "<li>Id: &nbsp; <b>"+this.id+"</b></li>";
     msg += "<li>Content: &nbsp; <b style='word-wrap: break-word; height:100%;'>"+this.name+"</b></li>";
     msg += "<li>Base value: &nbsp; <b>"+this.baseValue+"</b></li>";
-    msg += "<li>Computed value: &nbsp; <b>"+this.computedValue+"</b></li>";
+    msg += "<li>Computed value Quad: &nbsp; <b>"+this.computedValueQuad+"</b></li>";
+    msg += "<li>Computed value DF-Quad: &nbsp; <b>"+this.computedValueDFQuad+"</b></li>";
     msg += "<li>Type: &nbsp; <b>"+this.type+"</b></li>";
+    if(this.createdBy!=''){
+        msg += "<li>Created by: &nbsp; <b>"+this.createdBy+"</b></li>";
+    }
+    if(this.modifiedBy!='') {
+        msg += "<li>Modified by: &nbsp; <b>"+this.modifiedBy+"</b></li>";
+    }
     msg += "<li>Tag: &nbsp; <b>"+this.typeValue+"</b></li>";
     msg += "<li>State: &nbsp; <b>"+this.state+"</b></li>";
+   
 
     // If it's an URI make it clickable, else make it a normal string.
-    if(validURL(this.attachment)){
-      msg += "<li>Attachment: &nbsp; <a href="+this.attachment+" target='_blank'>"+this.attachment+"</a></li>";
+    var single_attachment = this.attachment.split(',');
+    msg += "<li>Attachment: &nbsp;"; 
+    for (i=0; i<single_attachment.length; i++) {
+       // if(validURL(single_attachment[i])){
+          // manage the blank spaces (eventually)
+          single_attachment[i] = makeValidURL(single_attachment[i]);
+          msg += "<a href="+single_attachment[i]+" target='_blank'> "+single_attachment[i]+" </a>";
+        //}
+        /*else {
+          msg += "<b>"+single_attachment[i]+"</b>";
+        }*/
     }
-    else {
-      msg += "<li>Attachment: &nbsp; <b>"+this.attachment+"</b></li>";
-    }
+    
+    msg += "</li>";
+    
 
     msg += "</ul></div>";
   bootbox.alert(msg);
@@ -155,13 +178,28 @@ function initializeNode(){
         });
 }
 
-function editInfo(name, baseValue, computedValue, typeValue, state, attachment){
+function editInfo(name, baseValue, computedValueQuad, computedValueDFQuad, typeValue, state, attachment, modifiedBy){
   this.name = name;
   this.baseValue = baseValue;
-  this.computedValue = computedValue;
+  this.computedValueQuad = computedValueQuad;
+  this.computedValueDFQuad = computedValueDFQuad;
   this.typeValue = typeValue;
   this.state = state;
   this.attachment = attachment;
+  this.modifiedBy = modifiedBy;
+    
+}
+
+function editStateInfo(state, modifiedBy) {
+    this.state = state;
+    this.modifiedBy = modifiedBy;
+}
+
+function editTypeInfo(type, modifiedBy) {
+    if(this.state=='Basic') {
+        this.type = type;
+        this.modifiedBy = modifiedBy;
+    }
 }
 
 function getSupporters(){

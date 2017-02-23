@@ -4215,13 +4215,13 @@
                     && o[0] == ao[0] && o[1] == ao[1];
         };
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
         this.getCurrentLocation = function(params) { return lastReturnValue == null ? self.compute(params) : lastReturnValue; };
-=======
+//=======
         this.getCurrentLocation = function(params) { 
             return (lastReturnValue == null || (params.timestamp != null && self.timestamp != params.timestamp)) ? self.compute(params) : lastReturnValue; 
         };
->>>>>>> weird_loopback_connections
+//>>>>>>> weird_loopback_connections
         
         this.getUserDefinedLocation = function() { 
             return userDefinedLocation;
@@ -6042,11 +6042,11 @@
                     }
                     
                     var sAnchorP = sE.anchor.getCurrentLocation({xy:[sourceInfo.left,sourceInfo.top], wh:[sourceInfo.width, sourceInfo.height], element:sE, timestamp:timestamp}),				
-<<<<<<< HEAD
+//<<<<<<< HEAD
                         tAnchorP = tE.anchor.getCurrentLocation({xy:[targetInfo.left,targetInfo.top], wh:[targetInfo.width, targetInfo.height], element:tE, timestamp:timestamp});                                
-=======
+//=======
                         tAnchorP = tE.anchor.getCurrentLocation({xy:[targetInfo.left,targetInfo.top], wh:[targetInfo.width, targetInfo.height], element:tE, timestamp:timestamp});                                                 
->>>>>>> weird_loopback_connections
+//>>>>>>> weird_loopback_connections
                         
                     connector.resetBounds();
 

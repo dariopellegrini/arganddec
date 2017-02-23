@@ -20,11 +20,6 @@ function addRight(debateId, element){
 		right='';
 	}
 
-
-
-
-
-
 	  $.ajax({
             type: "POST",
             url: "save-right.php",
