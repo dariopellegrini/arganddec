@@ -110,9 +110,11 @@ i.glyphicon-trash{
         <h4 class="modal-title" style="color: white;"></h4>
       </div>
       <div class="modal-body">
-      </div>
+      
+    </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+      
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
