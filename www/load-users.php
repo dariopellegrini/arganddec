@@ -17,15 +17,15 @@ $userid = $_SESSION['id'];
 $debateid = $_POST['did'];
 
 
-$sqldata1 = mysql_query("SELECT users.id, users.username, rights.accessright FROM users LEFT JOIN rights "
-        . "ON users.id=rights.userid AND rights.debateid='$debateid' WHERE users.id!='$userid'") or die(mysql_error());
+$sqldata1 = mysqli_query($connection, "SELECT users.id, users.username, rights.accessright FROM users LEFT JOIN rights "
+        . "ON users.id=rights.userid AND rights.debateid='$debateid' WHERE users.id!='$userid'") or die(mysqli_error($connection));
 
 $rows = array();
-while($r = mysql_fetch_assoc($sqldata1)) {
+while($r = mysqli_fetch_assoc($sqldata1)) {
   $rows[] = $r;
 }
 
 
 echo json_encode($rows);
 
-mysql_close($connection);
+mysqli_close($connection);

@@ -29,21 +29,21 @@ echo json_encode($a);
 function loadSons($targetid,$matrixid){
 
 	$added=array();
-		$sql1 = mysql_query("SELECT sourceid,targetid FROM edgesfreeze WHERE targetid='$targetid' AND matrixid='$matrixid'") or die(mysql_error());
+		$sql1 = mysqli_query($connection, "SELECT sourceid,targetid FROM edgesfreeze WHERE targetid='$targetid' AND matrixid='$matrixid'") or die(mysqli_error($connection));
 
-	while($r = mysql_fetch_assoc($sql1)) {
+	while($r = mysqli_fetch_assoc($sql1)) {
 		$sourceid=$r['sourceid'];
 
-		$sql2=mysql_query("SELECT * FROM nodesfreeze WHERE originalid='$sourceid'") or die(mysql_error());
+		$sql2=mysqli_query($connection, "SELECT * FROM nodesfreeze WHERE originalid='$sourceid'") or die(mysqli_error($connection));
 
-//		while($s=mysql_fetch_array($sql2)){
-			array_push($added,mysql_fetch_object($sql2));
+//		while($s=mysqli_fetch_array($sql2)){
+			array_push($added,mysqli_fetch_object($sql2));
 //		}
 		array_push($added, loadSons($sourceid,$matrixid));
 	}
 	return $added;
 }
 
-mysql_close($connection);
+mysqli_close($connection);
 
 ?>

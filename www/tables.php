@@ -14,16 +14,16 @@ if (!isset($_SESSION['id'])) {
 
 $id = $_SESSION['id'];
 
-$sql = mysql_query("Select * From users Where id='$id'") or die(mysql_error());
+$sql = mysqli_query($connection, "Select * From users Where id='$id'") or die(mysqli_error($connection));
 
-while ($s = mysql_fetch_array($sql)) {
+while ($s = mysqli_fetch_array($sql)) {
   $id = $s['id'];
   $name = $s['username'];
 }
 
 $matrixid=$_GET['id'];
 
-mysql_close($connection);
+mysqli_close($connection);
 
 ?>
 <!DOCTYPE html>

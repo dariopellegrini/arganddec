@@ -16,8 +16,8 @@ if (!isset($_SESSION['id'])) {
 $owner = $_POST['uid'];
 $debateid = $_POST['did'];
 
-$sql = mysql_query("SELECT users.username, rights.accessright FROM rights INNER JOIN "
-        . "users ON rights.userid=users.id WHERE rights.debateid='$debateid'") or die(mysql_error());
+$sql = mysqli_query($connection, "SELECT users.username, rights.accessright FROM rights INNER JOIN "
+        . "users ON rights.userid=users.id WHERE rights.debateid='$debateid'") or die(mysqli_error($connection));
 
 /*SELECT Customers.CustomerName, Orders.OrderID
 FROM Customers
@@ -25,14 +25,14 @@ INNER JOIN Orders
 ON Customers.CustomerID=Orders.CustomerID
 ORDER BY Customers.CustomerName;*/
 
-$num=mysql_num_rows($sql);
+$num=mysqli_num_rows($sql);
 
 $str='Participants: <b>';
 $accessright='';
 
 if($num>0) {
 
-    while($row = mysql_fetch_array($sql)){
+    while($row = mysqli_fetch_array($sql)){
 
         if($row["accessright"]=='o') {
             $accessright = 'owner';
@@ -54,4 +54,4 @@ if($num>0) {
 
 echo $str."</b>";
 
-mysql_close($connection);
+mysqli_close($connection);

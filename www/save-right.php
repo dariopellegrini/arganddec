@@ -19,19 +19,19 @@ $right = $_POST['r'];
 
 
 
-$sql1 = mysql_query("SELECT * FROM rights WHERE userid='$userid' AND debateid='$debateid'") or die(mysql_error());
+$sql1 = mysqli_query($connection, "SELECT * FROM rights WHERE userid='$userid' AND debateid='$debateid'") or die(mysqli_error($connection));
 if($right!=''){
-    if (mysql_num_rows($sql1)>0){
-            $sql2 = mysql_query("UPDATE rights SET accessright='$right',modified=CURRENT_TIMESTAMP WHERE userid='$userid' AND debateid='$debateid'") or die(mysql_error());
+    if (mysqli_num_rows($sql1)>0){
+            $sql2 = mysqli_query($connection, "UPDATE rights SET accessright='$right',modified=CURRENT_TIMESTAMP WHERE userid='$userid' AND debateid='$debateid'") or die(mysqli_error($connection));
     }
     else {
-            $sql2 = mysql_query("INSERT INTO rights (userid,debateid,accessright,modified) VALUES ('$userid','$debateid','$right',CURRENT_TIMESTAMP)") or die(mysql_error());
+            $sql2 = mysqli_query($connection, "INSERT INTO rights (userid,debateid,accessright,modified) VALUES ('$userid','$debateid','$right',CURRENT_TIMESTAMP)") or die(mysqli_error($connection));
     }
 }
 else {
-    $sql3 = mysql_query("DELETE FROM rights WHERE userid='$userid' AND debateid='$debateid'") or die(mysql_error());
+    $sql3 = mysqli_query($connection, "DELETE FROM rights WHERE userid='$userid' AND debateid='$debateid'") or die(mysqli_error($connection));
 }
 
 echo 'OK!';
 
-mysql_close($connection);
+mysqli_close($connection);

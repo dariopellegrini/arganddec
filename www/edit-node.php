@@ -19,7 +19,7 @@ $username = $_SESSION['username'];
 
 
 $id = $_POST['id'];
-$name = $_POST['n']; $name = escape_apex($name);
+$name = mysqli_real_escape_string($connection, $_POST['n']);
 $basevalue = $_POST['bv'];
 $computedvaluequad = $_POST['cvq'];
 $computedvaluedfquad = $_POST['cvdfq'];
@@ -27,9 +27,9 @@ $typevalue = $_POST['tv'];
 $state = $_POST['s'];
 $attachment = $_POST['a'];
 
-$sqldebateid=mysql_query("SELECT debateid, modifiedby FROM nodes WHERE id=$id") or die(mysql_error());
+$sqldebateid=mysqli_query($connection, "SELECT debateid, modifiedby FROM nodes WHERE id=$id") or die(mysqli_error($connection));
 
-while($r=mysql_fetch_array($sqldebateid)){
+while($r=mysqli_fetch_array($sqldebateid)){
 	$debateid=$r['debateid'];
         $modifiedby=$r['modifiedby'];
 }
@@ -43,9 +43,9 @@ if($pos === false) {
     
 } else  $modifiedby_str = $modifiedby;
 
-$sql = mysql_query("UPDATE nodes SET name='$name', basevalue='$basevalue', computedvaluequad='$computedvaluequad', computedvaluedfquad='$computedvaluedfquad', typevalue='$typevalue', state='$state', attachment='$attachment', modifiedby='$modifiedby_str' WHERE id='$id'") or die(mysql_error());
+$sql = mysqli_query($connection, "UPDATE nodes SET name='$name', basevalue='$basevalue', computedvaluequad='$computedvaluequad', computedvaluedfquad='$computedvaluedfquad', typevalue='$typevalue', state='$state', attachment='$attachment', modifiedby='$modifiedby_str' WHERE id='$id'") or die(mysqli_error($connection));
 
-$nodeid = mysql_insert_id();
+$nodeid = mysqli_insert_id($connection);
 
 echo json_encode(array("nodeid"=>$nodeid,"modifiedby"=>$modifiedby_str));
 
@@ -73,6 +73,6 @@ $pusher->trigger('test_channel', 'my_event', $data);
 
 
 // update the date of the last modified (by) of the current debate
-$sql1 = mysql_query("UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$debateid'");
+$sql1 = mysqli_query($connection, "UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$debateid'");
 
-mysql_close($connection);
+mysqli_close($connection);

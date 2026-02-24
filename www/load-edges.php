@@ -16,13 +16,13 @@ $userid = $_SESSION['id'];
 $debateid = $_POST['did'];
 
 
-$sqldata = mysql_query("SELECT * FROM edges WHERE debateid = $debateid") or die();
+$sqldata = mysqli_query($connection, "SELECT * FROM edges WHERE debateid = $debateid") or die();
 
 $rows = array();
-while($r = mysql_fetch_assoc($sqldata)) {
+while($r = mysqli_fetch_assoc($sqldata)) {
   $rows[] = $r;
 }
 
 echo json_encode($rows);
 
-mysql_close($connection);
+mysqli_close($connection);

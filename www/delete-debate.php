@@ -21,12 +21,12 @@ $userid = $_SESSION['id'];
 $id = $_POST['id'];
 
 
-$sql1 = mysql_query("DELETE FROM debates WHERE id=$id AND ownerid='$userid'") or die(mysql_error());
-$sql2 = mysql_query("DELETE FROM nodes WHERE debateid=$id") or die(mysql_error());
-$sql3 = mysql_query("DELETE FROM edges WHERE debateid=$id") or die(mysql_error());
-$sql4 = mysql_query("DELETE FROM rights WHERE debateid='$id'") or die (mysql_error());
-$sql5 = mysql_query("DELETE FROM mapping WHERE debateid='$debateid'") or die(mysql_error());
+$sql1 = mysqli_query($connection, "DELETE FROM debates WHERE id=$id AND ownerid='$userid'") or die(mysqli_error($connection));
+$sql2 = mysqli_query($connection, "DELETE FROM nodes WHERE debateid=$id") or die(mysqli_error($connection));
+$sql3 = mysqli_query($connection, "DELETE FROM edges WHERE debateid=$id") or die(mysqli_error($connection));
+$sql4 = mysqli_query($connection, "DELETE FROM rights WHERE debateid='$id'") or die (mysqli_error($connection));
+$sql5 = mysqli_query($connection, "DELETE FROM mapping WHERE debateid='$debateid'") or die(mysqli_error($connection));
 
-echo mysql_insert_id();
+echo mysqli_insert_id($connection);
 
-mysql_close($connection);
+mysqli_close($connection);

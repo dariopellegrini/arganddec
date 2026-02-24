@@ -21,8 +21,8 @@ $srcdebate = $_POST['did'];
 
 $srcnode = $_POST['sn'];
 
-$sql1 = mysql_query("DELETE FROM `wormholes` WHERE userid='$userid' AND dstdebate IS NULL AND dstnode IS NULL") or die(mysql_error());
-$sql2 = mysql_query("INSERT INTO `wormholes` (`userid`, `srcdebate`, `dstdebate`, `srcnode`, `dstnode`) VALUES ('$userid', '$srcdebate', NULL, '$srcnode', NULL);") or die(mysql_error());
+$sql1 = mysqli_query($connection, "DELETE FROM `wormholes` WHERE userid='$userid' AND dstdebate IS NULL AND dstnode IS NULL") or die(mysqli_error($connection));
+$sql2 = mysqli_query($connection, "INSERT INTO `wormholes` (`userid`, `srcdebate`, `dstdebate`, `srcnode`, `dstnode`) VALUES ('$userid', '$srcdebate', NULL, '$srcnode', NULL);") or die(mysqli_error($connection));
 
 if ($sql2){
 	echo "Wormhole node copied.";
@@ -31,4 +31,4 @@ else {
 	echo "Something went wrong.";
 }
 
-mysql_close($connection);
+mysqli_close($connection);

@@ -20,9 +20,9 @@ $username = $_SESSION['username'];
 $id = $_POST['id'];
 $type = $_POST['type'];
 
-$sqldebateid=mysql_query("SELECT debateid, state, modifiedby FROM nodes WHERE id=$id") or die(mysql_error());
+$sqldebateid=mysqli_query($connection, "SELECT debateid, state, modifiedby FROM nodes WHERE id=$id") or die(mysqli_error($connection));
 
-while($r=mysql_fetch_array($sqldebateid)){
+while($r=mysqli_fetch_array($sqldebateid)){
 	$debateid=$r['debateid'];
         $state=$r['state'];
         $modifiedby=$r['modifiedby'];
@@ -38,9 +38,9 @@ if($state==='Basic') {
 
     } else  $modifiedby_str = $modifiedby;
 
-    $sql = mysql_query("UPDATE nodes SET type='$type', modifiedby='$modifiedby_str' WHERE id=$id") or die(mysql_error());
+    $sql = mysqli_query($connection, "UPDATE nodes SET type='$type', modifiedby='$modifiedby_str' WHERE id=$id") or die(mysqli_error($connection));
 
-    echo mysql_insert_id();
+    echo mysqli_insert_id($connection);
 
     $app_id = '104765';
     $app_key = '4a093e77bfac049910cf';
@@ -58,11 +58,11 @@ if($state==='Basic') {
     $pusher->trigger('test_channel', 'my_event', $data);
 
     // update the date of the last modified (by) of the current debate
-    $sql1 = mysql_query("UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$debateid'");
+    $sql1 = mysqli_query($connection, "UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$debateid'");
 }
 else {
     $res['success']=0;
     echo json_encode($res);
 }
 
-mysql_close($connection);
+mysqli_close($connection);

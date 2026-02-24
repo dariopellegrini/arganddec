@@ -23,15 +23,15 @@ $userid = $_SESSION['id'];
 
 $id = $_POST['id'];
 
-$sqldebateid=mysql_query("SELECT debateid FROM edges WHERE id=$id") or die(mysql_error());
+$sqldebateid=mysqli_query($connection, "SELECT debateid FROM edges WHERE id=$id") or die(mysqli_error($connection));
 
-while($r=mysql_fetch_array($sqldebateid)){
+while($r=mysqli_fetch_array($sqldebateid)){
 	$debateid=$r['debateid'];
 }
 
-$sql = mysql_query("DELETE FROM edges WHERE id=$id") or die(mysql_error());
+$sql = mysqli_query($connection, "DELETE FROM edges WHERE id=$id") or die(mysqli_error($connection));
 
-echo mysql_insert_id();
+echo mysqli_insert_id($connection);
 
 $app_id = '104765';
 $app_key = '4a093e77bfac049910cf';
@@ -46,4 +46,4 @@ $data['edgeid']=$id;
 
 $pusher->trigger('test_channel', 'my_event', $data);
 
-mysql_close($connection);
+mysqli_close($connection);

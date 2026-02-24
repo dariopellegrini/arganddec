@@ -18,13 +18,13 @@ $matrixid = $_POST['mid'];
 
 
 
-$sqldata = mysql_query("SELECT * FROM cells WHERE matrixid='$matrixid' ORDER BY 'row','column' ASC") or die(mysql_error());
+$sqldata = mysqli_query($connection, "SELECT * FROM cells WHERE matrixid='$matrixid' ORDER BY 'row','column' ASC") or die(mysqli_error($connection));
 
 $rows = array();
-while($r = mysql_fetch_assoc($sqldata)) {
+while($r = mysqli_fetch_assoc($sqldata)) {
   $rows[] = $r;
 }
 
 echo json_encode($rows);
 
-mysql_close($connection);
+mysqli_close($connection);

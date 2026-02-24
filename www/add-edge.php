@@ -27,9 +27,9 @@ $sourceid = $_POST['s'];
 $targetid = $_POST['t'];
 
 
-$sql = mysql_query("Insert Into edges (debateid,sourceid,targetid) Values ('$debateid','$sourceid','$targetid')") or die(mysql_error());
+$sql = mysqli_query($connection, "Insert Into edges (debateid,sourceid,targetid) Values ('$debateid','$sourceid','$targetid')") or die(mysqli_error($connection));
 
-$edgeid=mysql_insert_id();
+$edgeid=mysqli_insert_id($connection);
 echo $edgeid;
 
 
@@ -52,6 +52,6 @@ $data['targetid']=$targetid;
 $pusher->trigger('test_channel', 'my_event', $data);
 
 // update lastmodified(by) in debates
-$sql1 = mysql_query("UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$debateid'");
+$sql1 = mysqli_query($connection, "UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$debateid'");
 
-mysql_close($connection);
+mysqli_close($connection);

@@ -19,19 +19,19 @@ $userid = $_SESSION['id'];
 
 $matrixid = $_POST['id'];
 
-$sql1 = mysql_query("DELETE FROM matrices WHERE id='$matrixid'") or die(mysql_error());
+$sql1 = mysqli_query($connection, "DELETE FROM matrices WHERE id='$matrixid'") or die(mysqli_error($connection));
 
-$sql2 = mysql_query("DELETE FROM cells WHERE matrixid='$matrixid'") or die(mysql_error());
+$sql2 = mysqli_query($connection, "DELETE FROM cells WHERE matrixid='$matrixid'") or die(mysqli_error($connection));
 
-$sql3 = mysql_query("DELETE FROM mapping WHERE matrixid='$matrixid'") or die(mysql_error());
+$sql3 = mysqli_query($connection, "DELETE FROM mapping WHERE matrixid='$matrixid'") or die(mysqli_error($connection));
 
-$sql4 = mysql_query("DELETE FROM nodesfreeze WHERE matrixid='$matrixid'") or die(mysql_error());
+$sql4 = mysqli_query($connection, "DELETE FROM nodesfreeze WHERE matrixid='$matrixid'") or die(mysqli_error($connection));
 
-$sql5 = mysql_query("DELETE FROM edgesfreeze WHERE matrixid='$matrixid'") or die(mysql_error());
+$sql5 = mysqli_query($connection, "DELETE FROM edgesfreeze WHERE matrixid='$matrixid'") or die(mysqli_error($connection));
 
 echo "ok";
 
 
-mysql_close($connection);
+mysqli_close($connection);
 
 ?>

@@ -25,11 +25,11 @@ $participants = $_POST['p'];
 $typeValue = $_POST['tv'];
 
 
-$sql = mysql_query("UPDATE debates SET name='$name', defaultbasevalue='$defaultBaseValue', participants='$participants', typevalue='$typeValue' WHERE id=$id") or die(mysql_error());
+$sql = mysqli_query($connection, "UPDATE debates SET name='$name', defaultbasevalue='$defaultBaseValue', participants='$participants', typevalue='$typeValue' WHERE id=$id") or die(mysqli_error($connection));
 
-echo mysql_insert_id();
+echo mysqli_insert_id($connection);
 
 // update lastmodified(by) in debates
-$sql1 = mysql_query("UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$id'");
+$sql1 = mysqli_query($connection, "UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$username'  WHERE id='$id'");
 
-mysql_close($connection);
+mysqli_close($connection);

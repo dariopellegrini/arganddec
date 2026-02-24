@@ -16,11 +16,11 @@ if (!isset($_SESSION['id'])) {
 
 $debateid = $_POST['did'];
 
-$sql = mysql_query("SELECT defaultbasevalue FROM debates WHERE id='$debateid'") or die(mysql_error());
+$sql = mysqli_query($connection, "SELECT defaultbasevalue FROM debates WHERE id='$debateid'") or die(mysqli_error($connection));
 
-$row = mysql_fetch_array($sql);
+$row = mysqli_fetch_array($sql);
 $result['basevalue']=$row['defaultbasevalue'];
 
 echo json_encode($result);
 
-mysql_close($connection);
+mysqli_close($connection);

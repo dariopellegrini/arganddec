@@ -39,7 +39,7 @@ foreach ($jsonNodes as $el) {
 	$state=$el['state'];
 	$attachment=$el['attachment'];
 
-	$sql=mysql_query("INSERT INTO nodesfreeze (originalid,matrixid,debateid,name,basevalue,computedvalue,type,typevalue,state,attachment) VALUES ('$originalid','$matrixid','$debateid','$name','$basevalue','$computedvalue','$type','$typeValue','$state','$attachment')") or die(mysql_error());
+	$sql=mysqli_query($connection, "INSERT INTO nodesfreeze (originalid,matrixid,debateid,name,basevalue,computedvalue,type,typevalue,state,attachment) VALUES ('$originalid','$matrixid','$debateid','$name','$basevalue','$computedvalue','$type','$typeValue','$state','$attachment')") or die(mysqli_error($connection));
 
 }
 
@@ -52,10 +52,10 @@ foreach ($jsonEdges as $el) {
 	$targetid=$el['targetid'];
 	$value=$el['value'];
 
-	$sql=mysql_query("INSERT INTO edgesfreeze (originalid,matrixid,debateid,sourceid,targetid,value) VALUES ('$originalid','$matrixid','$debateid','$sourceid','$targetid','$value')") or die(mysql_error());
+	$sql=mysqli_query($connection, "INSERT INTO edgesfreeze (originalid,matrixid,debateid,sourceid,targetid,value) VALUES ('$originalid','$matrixid','$debateid','$sourceid','$targetid','$value')") or die(mysqli_error($connection));
 
 }
 
-mysql_close($connection);
+mysqli_close($connection);
 
 ?>

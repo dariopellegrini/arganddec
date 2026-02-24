@@ -22,27 +22,27 @@ $debateid = $_POST['did'];
 $matrixid = $_POST['mid'];
 $returntype = $_POST['rt'];
 
-$sql1 = mysql_query("INSERT INTO mapping (userid,debateid,matrixid) VALUES ('$userid','$debateid','$matrixid')") or die(mysql_error());
+$sql1 = mysqli_query($connection, "INSERT INTO mapping (userid,debateid,matrixid) VALUES ('$userid','$debateid','$matrixid')") or die(mysqli_error($connection));
 
 if($returntype=="matrix"){
-	$sql2 = mysql_query("SELECT * FROM debates WHERE id='$debateid'") or die(mysql_error());
+	$sql2 = mysqli_query($connection, "SELECT * FROM debates WHERE id='$debateid'") or die(mysqli_error($connection));
 
-	while($r=mysql_fetch_array($sql2)){
+	while($r=mysqli_fetch_array($sql2)){
 
 		echo "<li><a href='diagram.php?id=".$debateid."'><b>".$r['name']."</b></a></li>";
 
 	}
 }
 else if($returntype=="debate"){
-	$sql3 = mysql_query("SELECT * FROM matrices WHERE id='$matrixid'") or die(mysql_error());
+	$sql3 = mysqli_query($connection, "SELECT * FROM matrices WHERE id='$matrixid'") or die(mysqli_error($connection));
 
-	while($r=mysql_fetch_array($sql3)){
+	while($r=mysqli_fetch_array($sql3)){
 
 		echo "<li><a href='scores.php?id=".$matrixid."'><b>".$r['name']."</b></a></li>";
 
 	}
 }
 
-mysql_close($connection);
+mysqli_close($connection);
 
 ?>

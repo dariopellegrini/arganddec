@@ -21,34 +21,34 @@ $debateid = $_SESSION['debate'];
 
 
 
-$sqldata = mysql_query("SELECT * FROM wormholes WHERE (srcdebate=$debateid OR dstdebate=$debateid) AND dstdebate IS NOT NULL ") or die(mysql_error());
+$sqldata = mysqli_query($connection, "SELECT * FROM wormholes WHERE (srcdebate=$debateid OR dstdebate=$debateid) AND dstdebate IS NOT NULL ") or die(mysqli_error($connection));
 
 $rows = array();
-while($r = mysql_fetch_assoc($sqldata)) {
+while($r = mysqli_fetch_assoc($sqldata)) {
 
 	$srcdebate = $r['srcdebate'];
 	$dstdebate = $r['dstdebate'];
 
-	$sqldebatedata = mysql_query("SELECT name FROM debates WHERE id!='$debateid' AND (id='$srcdebate' OR id='$dstdebate') ") or die(mysql_error());
+	$sqldebatedata = mysqli_query($connection, "SELECT name FROM debates WHERE id!='$debateid' AND (id='$srcdebate' OR id='$dstdebate') ") or die(mysqli_error($connection));
 
-	$debaterow = mysql_fetch_assoc($sqldebatedata);
+	$debaterow = mysqli_fetch_assoc($sqldebatedata);
 	$debatename = $debaterow['name'];
 
 	$srcnode = $r['srcnode'];
 	$dstnode = $r['dstnode'];
 
-	$sqlnodedata = mysql_query("SELECT name FROM nodes WHERE debateid!='$debateid' AND (id='$srcnode' OR id='$dstnode') ") or die(mysql_error());
+	$sqlnodedata = mysqli_query($connection, "SELECT name FROM nodes WHERE debateid!='$debateid' AND (id='$srcnode' OR id='$dstnode') ") or die(mysqli_error($connection));
 
-	$noderow = mysql_fetch_assoc($sqlnodedata);
+	$noderow = mysqli_fetch_assoc($sqlnodedata);
 	$nodename = $noderow['name'];
 
   $rows[] = array_merge($r,array_merge(array('debatename' => $debatename),array('nodename' => $nodename)));
 }
-if (mysql_num_rows($sqldata)>0){
+if (mysqli_num_rows($sqldata)>0){
 	echo json_encode($rows);
 }
 else {
 	echo 'false';
 }
 
-mysql_close($connection);
+mysqli_close($connection);

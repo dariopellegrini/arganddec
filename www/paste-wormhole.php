@@ -23,16 +23,16 @@ $dstnode = $_POST['dn'];
 
 
 // Recover srcdebate and src node of the copied wormhole.
-$sqluser = mysql_query("SELECT * FROM wormholes WHERE userid='$userid'") or die(mysql_error());
-$sql1 = mysql_query("SELECT * FROM wormholes WHERE dstdebate IS NULL AND dstnode IS NULL") or die(mysql_error());
+$sqluser = mysqli_query($connection, "SELECT * FROM wormholes WHERE userid='$userid'") or die(mysqli_error($connection));
+$sql1 = mysqli_query($connection, "SELECT * FROM wormholes WHERE dstdebate IS NULL AND dstnode IS NULL") or die(mysqli_error($connection));
 
 // Check if copied value exists.
-if (mysql_num_rows($sqluser)<=0 or mysql_num_rows($sql1)<=0){
+if (mysqli_num_rows($sqluser)<=0 or mysqli_num_rows($sql1)<=0){
 	echo "ALERT: trying to paste a non copied wormhole.";
 	die();
 }
 
-while ($r=mysql_fetch_array($sql1)){
+while ($r=mysqli_fetch_array($sql1)){
 	$srcdebate = $r['srcdebate'];
 	$srcnode = $r['srcnode'];
 }
@@ -45,22 +45,22 @@ if ($srcdebate == $dstdebate){
 }
 
 // Check the existence of a possible duplication of a wormhole and avoid it.
-$sql2 = mysql_query("SELECT * FROM wormholes WHERE (srcnode='$srcnode' AND dstnode='$dstnode') OR (srcnode='$dstnode' AND dstnode='$srcnode')" )  or die(mysql_error());
+$sql2 = mysqli_query($connection, "SELECT * FROM wormholes WHERE (srcnode='$srcnode' AND dstnode='$dstnode') OR (srcnode='$dstnode' AND dstnode='$srcnode')" )  or die(mysqli_error($connection));
 
-if (mysql_num_rows($sql2)>0){
+if (mysqli_num_rows($sql2)>0){
 	echo "ALERT : this wormole already exists in the database.";
 	die();
 }
 
-$sql3 = mysql_query("UPDATE wormholes SET dstdebate='$dstdebate', dstnode='$dstnode' WHERE userid='$userid' AND dstdebate IS NULL AND dstnode IS NULL") or die(mysql_error());
+$sql3 = mysqli_query($connection, "UPDATE wormholes SET dstdebate='$dstdebate', dstnode='$dstnode' WHERE userid='$userid' AND dstdebate IS NULL AND dstnode IS NULL") or die(mysqli_error($connection));
 
-$sql4 = mysql_query("SELECT * FROM debates WHERE id='$srcdebate'") or die(mysql_error());
+$sql4 = mysqli_query($connection, "SELECT * FROM debates WHERE id='$srcdebate'") or die(mysqli_error($connection));
 
 $rows = array();
 
-while($r = mysql_fetch_assoc($sql4)) {
-	$sql5 = mysql_query("SELECT name FROM nodes WHERE id='$srcnode' ") or die(mysql_error());
-	$noderow = mysql_fetch_assoc($sql5);
+while($r = mysqli_fetch_assoc($sql4)) {
+	$sql5 = mysqli_query($connection, "SELECT name FROM nodes WHERE id='$srcnode' ") or die(mysqli_error($connection));
+	$noderow = mysqli_fetch_assoc($sql5);
 	$srcnodename = $noderow['name'];
   $rows[] = array_merge($r,array_merge(array('srcnode' => $srcnode),array('srcnodename' => $srcnodename)));
 }
@@ -82,6 +82,6 @@ $data['json']=$encodedrows;
 
 $pusher->trigger('test_channel', 'my_event', $data);
 
-mysql_close($connection);
+mysqli_close($connection);
 
 //	echo $srcdebate;

@@ -19,7 +19,7 @@ $createdby = $_SESSION['username'];
 
 $debateid = $_POST['did'];
 
-$name = mysql_real_escape_string($_POST['n']); 
+$name = mysqli_real_escape_string($connection, $_POST['n']); 
 $basevalue = $_POST['bv'];
 $computedvaluequad = $_POST['cvq'];
 $computedvaluedfquad = $_POST['cvdfq'];
@@ -31,9 +31,9 @@ $x = $_POST['x'];
 $y = $_POST['y'];
 
 
-$sql = mysql_query("Insert Into nodes (debateid, name, basevalue, computedvaluequad, computedvaluedfquad, type, typevalue, state, attachment, x, y, createdby) Values ($debateid, '$name', '$basevalue', '$computedvaluequad','$computedvaluedfquad','$type', '$typevalue', '$state', '$attachment', '$x', '$y', '$createdby')") or die(mysql_error());
+$sql = mysqli_query($connection, "Insert Into nodes (debateid, name, basevalue, computedvaluequad, computedvaluedfquad, type, typevalue, state, attachment, x, y, createdby) Values ($debateid, '$name', '$basevalue', '$computedvaluequad','$computedvaluedfquad','$type', '$typevalue', '$state', '$attachment', '$x', '$y', '$createdby')") or die(mysqli_error($connection));
 
-$nodeid=mysql_insert_id();
+$nodeid=mysqli_insert_id($connection);
 
 echo json_encode(array("nodeid"=>$nodeid,"createdby"=>$createdby));
 
@@ -66,6 +66,6 @@ $pusher->trigger('test_channel', 'my_event', $data);
 
 
 // update lastmodified(by) in debates
-$sql1 = mysql_query("UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$createdby'  WHERE id='$debateid'");
+$sql1 = mysqli_query($connection, "UPDATE debates SET lastmodified=CURRENT_TIMESTAMP, lastmodifiedby='$createdby'  WHERE id='$debateid'");
 
-mysql_close($connection);
+mysqli_close($connection);

@@ -23,18 +23,13 @@ $debateid = $_POST['did'];
 
 
 
-$sqldata = mysql_query("SELECT * FROM nodes WHERE debateid = $debateid ORDER BY type ASC") or die();
+$sqldata = mysqli_query($connection, "SELECT * FROM nodes WHERE debateid = $debateid ORDER BY type ASC") or die();
 
 $rows = array();
-while($r = mysql_fetch_assoc($sqldata)) {
+while($r = mysqli_fetch_assoc($sqldata)) {
   $rows[] = $r;
 }
 
-$json_encoded_string = json_encode($rows);
+echo json_encode($rows);
 
-// manage percent symbol for json encoding
-$json_encoded_string = escape_percentage_for_json($json_encoded_string);
-
-echo $json_encoded_string;
-
-mysql_close($connection);
+mysqli_close($connection);

@@ -55,5 +55,5 @@ if (move_uploaded_file($userfile_tmp, $fullpath)) {
   echo json_encode($result);
 }
 
-mysql_close($connection);
+mysqli_close($connection);
 ?>

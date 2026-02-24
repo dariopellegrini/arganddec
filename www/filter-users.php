@@ -16,10 +16,10 @@ $user=$_POST['searchQuery']; $user=trim($user);
     
 // pick all the usernames of the users
 $sql="SELECT username FROM users ORDER BY id";
-$query=mysql_query($sql) or die ("Query non valida: " . mysql_error());
+$query=mysqli_query($connection, $sql) or die ("Query non valida: " . mysqli_error($connection));
 $users = array();
 $i=0;
-while($row=mysql_fetch_array($query)) {
+while($row=mysqli_fetch_array($query)) {
 
     $users[$i] = $row['username']; 
 
@@ -72,10 +72,10 @@ else {
 
     $sql_real = $sql1.$str;
 
-    $query=mysql_query($sql_real) or die ($sql1 . $str. mysql_error());
+    $query=mysqli_query($connection, $sql_real) or die ($sql1 . $str. mysqli_error($connection));
             
     $rows = array();
-    while($r = mysql_fetch_assoc($query)) {
+    while($r = mysqli_fetch_assoc($query)) {
       $rows[] = $r;
     }
      
@@ -90,6 +90,6 @@ else {
 
     
     
-mysql_close($connection);
+mysqli_close($connection);
 
 ?>

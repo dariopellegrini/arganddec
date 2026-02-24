@@ -18,9 +18,9 @@ $userid = $_SESSION['id'];
 $did = $_POST['did'];
 
 
-$sql1 = mysql_query("DELETE FROM rights WHERE debateid='$did' AND userid='$userid'") or die(mysql_error());
+$sql1 = mysqli_query($connection, "DELETE FROM rights WHERE debateid='$did' AND userid='$userid'") or die(mysqli_error($connection));
 
 
-echo mysql_insert_id();
+echo mysqli_insert_id($connection);
 
-mysql_close($connection);
+mysqli_close($connection);

@@ -21,15 +21,15 @@ $targetid = $_POST['tid'];
 
 
 
-$sql = mysql_query("SELECT * FROM edgesfreeze WHERE targetid='$targetid'") or die(mysql_error());
+$sql = mysqli_query($connection, "SELECT * FROM edgesfreeze WHERE targetid='$targetid'") or die(mysqli_error($connection));
 
-if(mysql_num_rows($sql)>0){
+if(mysqli_num_rows($sql)>0){
     echo 'true';
 }
 else{
     echo 'false';
 }
 
-mysql_close($connection);
+mysqli_close($connection);
 
 ?>

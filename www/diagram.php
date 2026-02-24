@@ -24,9 +24,9 @@ else {
   $nodeid='';
 }
 
-$sqldata1 = mysql_query("SELECT * FROM debates WHERE id=$debateid") or die();
+$sqldata1 = mysqli_query($connection, "SELECT * FROM debates WHERE id=$debateid") or die();
 
-while ($r1 = mysql_fetch_array($sqldata1)) {
+while ($r1 = mysqli_fetch_array($sqldata1)) {
   $name = $r1['name'];
   $defaultBaseValue = $r1['defaultbasevalue'];
   $participants = $r1['participants'];
@@ -35,14 +35,14 @@ while ($r1 = mysql_fetch_array($sqldata1)) {
 
 $_SESSION['debate'] = $debateid;
 
-$sqldata2 = mysql_query("SELECT * FROM rights WHERE userid='$userid' AND debateid='$debateid' ") or die(mysql_error());
+$sqldata2 = mysqli_query($connection, "SELECT * FROM rights WHERE userid='$userid' AND debateid='$debateid' ") or die(mysqli_error($connection));
 
-if (mysql_num_rows($sqldata2)<=0){
+if (mysqli_num_rows($sqldata2)<=0){
   echo "Forbidden.";
   die();
 }
 
-while($r2 = mysql_fetch_array($sqldata2)){
+while($r2 = mysqli_fetch_array($sqldata2)){
   $right = $r2['accessright'];
 }
 
@@ -51,9 +51,9 @@ if ($right=='n' | $right==""){
   die();
 }
 
-$sqldata3 = mysql_query("SELECT username FROM users WHERE id='$userid'") or die(mysql_error());
+$sqldata3 = mysqli_query($connection, "SELECT username FROM users WHERE id='$userid'") or die(mysqli_error($connection));
 
-while($r3=mysql_fetch_array($sqldata3)){
+while($r3=mysqli_fetch_array($sqldata3)){
   $username=$r3['username'];
 }
 
@@ -310,8 +310,8 @@ while($r3=mysql_fetch_array($sqldata3)){
   </h1>
       <h5> 
           <?php 
-                $sql = mysql_query("SELECT lastmodified, lastmodifiedby FROM debates WHERE id='$debateid'");
-                while($r = mysql_fetch_array($sql)) {
+                $sql = mysqli_query($connection, "SELECT lastmodified, lastmodifiedby FROM debates WHERE id='$debateid'");
+                while($r = mysqli_fetch_array($sql)) {
                     $lastModified = $r['lastmodified'];
                     $lastModifiedBy = $r['lastmodifiedby'];
                 }
@@ -338,9 +338,9 @@ while($r3=mysql_fetch_array($sqldata3)){
   <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
     <?php
 
-    $sqldata = mysql_query("SELECT debates.id, debates.name, rights.accessright FROM debates LEFT JOIN rights ON debates.id=rights.debateid WHERE rights.userid = '$userid' ORDER BY accessright ASC") or die();
+    $sqldata = mysqli_query($connection, "SELECT debates.id, debates.name, rights.accessright FROM debates LEFT JOIN rights ON debates.id=rights.debateid WHERE rights.userid = '$userid' ORDER BY accessright ASC") or die();
 
-    while($r = mysql_fetch_assoc($sqldata)) {
+    while($r = mysqli_fetch_assoc($sqldata)) {
 
       echo "<li role='presentation'><a role='menuitem' tabindex='-1' href='diagram.php?id=".$r['id']."'>".$r['name']." (".$r['accessright'].")</a></li>";
 
@@ -393,12 +393,12 @@ while($r3=mysql_fetch_array($sqldata3)){
 
     <?php
     // PARTICIPANTS //
-    $sql1 = mysql_query("SELECT users.username, rights.accessright FROM rights INNER JOIN "
-        . "users ON rights.userid=users.id WHERE rights.debateid='$debateid'") or die(mysql_error());
+    $sql1 = mysqli_query($connection, "SELECT users.username, rights.accessright FROM rights INNER JOIN "
+        . "users ON rights.userid=users.id WHERE rights.debateid='$debateid'") or die(mysqli_error($connection));
     
     $title = '<b>Participants</b>';
     $str='';
-    while($row = mysql_fetch_array($sql1)) {
+    while($row = mysqli_fetch_array($sql1)) {
         if($row["accessright"]=='o') {
             $accessright = 'owner';
         }
@@ -424,9 +424,9 @@ while($r3=mysql_fetch_array($sqldata3)){
     
     // MAPPING //
     // Only the user who create the mapping can see the mapping.
-      $sql2 = mysql_query("SELECT * FROM mapping WHERE userid='$userid' AND debateid='$debateid'") or die(mysql_error());
+      $sql2 = mysqli_query($connection, "SELECT * FROM mapping WHERE userid='$userid' AND debateid='$debateid'") or die(mysqli_error($connection));
 
-      if(mysql_num_rows($sql2)>0){
+      if(mysqli_num_rows($sql2)>0){
         echo "<div class='btn-group mapping-list'>";
       }
       else{
@@ -438,19 +438,19 @@ while($r3=mysql_fetch_array($sqldata3)){
       </button>
       <ul class='dropdown-menu pull-right' role='menu'>";
 
-      while($s=mysql_fetch_array($sql2)){
+      while($s=mysqli_fetch_array($sql2)){
 
         $matrixid=$s['matrixid'];
-        $sql3 = mysql_query("SELECT * FROM matrices WHERE id='$matrixid'") or die(mysql_error());
+        $sql3 = mysqli_query($connection, "SELECT * FROM matrices WHERE id='$matrixid'") or die(mysqli_error($connection));
 
-        while($t=mysql_fetch_array($sql3)){
+        while($t=mysqli_fetch_array($sql3)){
           $matrixname=$t['name'];
           echo "<li><a href='tables.php?id=".$matrixid."'><b>".$matrixname."</b></a></li>";
         }
       }
       echo "</ul></div>";
 
-      mysql_close($connection);
+      mysqli_close($connection);
 
     ?>
 

@@ -15,20 +15,20 @@ if (!isset($_SESSION['id'])) {
 
 $userid = $_SESSION['id'];
 
-$name = mysql_real_escape_string($_POST['n']); 
+$name = mysqli_real_escape_string($connection, $_POST['n']); 
 $defaultbasevalue = $_POST['dbv'];
 $participants =  $_POST['p'];
 $typevalue = $_POST['tv'];
 
 
-$sql1 = mysql_query("Insert Into debates (ownerid,name,defaultbasevalue,participants,typevalue) Values ($userid,'$name','$defaultbasevalue','$participants','$typevalue')") or die(mysql_error());
+$sql1 = mysqli_query($connection, "Insert Into debates (ownerid,name,defaultbasevalue,participants,typevalue) Values ($userid,'$name','$defaultbasevalue','$participants','$typevalue')") or die(mysqli_error($connection));
 
-$debateid = mysql_insert_id();
+$debateid = mysqli_insert_id($connection);
 $_SESSION['debate']=$debateid;
-echo mysql_insert_id();
+echo mysqli_insert_id($connection);
 
-$sql2 = mysql_query("INSERT INTO rights (userid,debateid,accessright,modified) VALUES ('$userid','$debateid','o',CURRENT_TIMESTAMP) ") or die(mysql_error());
+$sql2 = mysqli_query($connection, "INSERT INTO rights (userid,debateid,accessright,modified) VALUES ('$userid','$debateid','o',CURRENT_TIMESTAMP) ") or die(mysqli_error($connection));
 
-mysql_close($connection);
+mysqli_close($connection);
 
 ?>

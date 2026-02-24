@@ -18,19 +18,19 @@ if (!isset($_SESSION['id'])) {
 $userid = $_SESSION['id'];
 $id = $_POST['id'];
 
-$sqldebateid=mysql_query("SELECT debateid FROM nodes WHERE id=$id") or die(mysql_error());
+$sqldebateid=mysqli_query($connection, "SELECT debateid FROM nodes WHERE id=$id") or die(mysqli_error($connection));
 
-while($r=mysql_fetch_array($sqldebateid)){
+while($r=mysqli_fetch_array($sqldebateid)){
 	$debateid=$r['debateid'];
 }
 
-$sql1 = mysql_query("DELETE FROM nodes WHERE id=$id") or die(mysql_error());
+$sql1 = mysqli_query($connection, "DELETE FROM nodes WHERE id=$id") or die(mysqli_error($connection));
 
-$sql2 = mysql_query("DELETE FROM edges WHERE (sourceid=$id OR targetid=$id)") or die(mysql_error());
+$sql2 = mysqli_query($connection, "DELETE FROM edges WHERE (sourceid=$id OR targetid=$id)") or die(mysqli_error($connection));
 
-$sql3 = mysql_query("DELETE FROM wormholes WHERE (srcnode=$id OR dstnode=$id)") or die(mysql_error());
+$sql3 = mysqli_query($connection, "DELETE FROM wormholes WHERE (srcnode=$id OR dstnode=$id)") or die(mysqli_error($connection));
 
-echo mysql_insert_id();
+echo mysqli_insert_id($connection);
 
 $app_id = '104765';
 $app_key = '4a093e77bfac049910cf';
@@ -45,4 +45,4 @@ $data['nodeid']=$id;
 
 $pusher->trigger('test_channel', 'my_event', $data);
 
-mysql_close($connection);
+mysqli_close($connection);

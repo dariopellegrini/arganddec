@@ -17,10 +17,10 @@ $userid = $_SESSION['id'];
 
 
 
-$sqldata = mysql_query("SELECT debates.id,debates.ownerid,debates.name,debates.defaultbasevalue,debates.participants,debates.typevalue,rights.accessright FROM debates LEFT JOIN rights ON debates.id=rights.debateid AND rights.userid='$userid' ORDER BY debates.name ASC") or die(mysql_error());
+$sqldata = mysqli_query($connection, "SELECT debates.id,debates.ownerid,debates.name,debates.defaultbasevalue,debates.participants,debates.typevalue,rights.accessright FROM debates LEFT JOIN rights ON debates.id=rights.debateid AND rights.userid='$userid' ORDER BY debates.name ASC") or die(mysqli_error($connection));
 
 $rows = array();
-while($r = mysql_fetch_assoc($sqldata)) {
+while($r = mysqli_fetch_assoc($sqldata)) {
   $rows[] = $r;
 }
 
@@ -29,4 +29,4 @@ $json_encoded_string = json_encode($rows);
 echo $json_encoded_string;
 
 
-mysql_close($connection);
+mysqli_close($connection);
